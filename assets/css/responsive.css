@@ -1,9 +1,18 @@
-/* responsive.css - Styles pour l'adaptation aux différents écrans (version corrigée) */
+/* responsive.css - Styles pour l'adaptation aux différents écrans (version finale maquette) */
 
 /* Grand écran (ordinateurs de bureau) */
 @media (min-width: 1200px) {
     .container {
         max-width: 1140px;
+    }
+
+    /* Optimisation du header pour grands écrans */
+    .header-top-elements {
+        margin-right: 25px;
+    }
+
+    .main-nav ul li {
+        margin: 0 25px;
     }
 }
 
@@ -43,14 +52,42 @@
         font-size: 13px;
     }
 
-    /* Ajustements pour le header responsive */
-    .top-right-container {
-        flex-direction: column;
-        align-items: flex-end;
+    /* Ajustements pour le header responsive selon la maquette */
+    .header-top-elements {
+        margin-right: 20px;
+    }
+
+    .main-nav ul li {
+        margin: 0 18px;
+    }
+
+    .social-icons {
+        margin-right: 12px;
+    }
+
+    .social-icons a {
+        margin: 0 3px;
+        font-size: 15px;
     }
 
     .contact-btn {
-        margin-top: 5px;
+        margin-right: 12px;
+    }
+
+    .contact-btn .btn {
+        padding: 7px 14px;
+        font-size: 12px;
+    }
+
+    /* Ajustement des dropdowns pour écrans moyens */
+    .dropdown-menu {
+        min-width: 180px;
+        padding: 12px 0;
+    }
+
+    .dropdown-menu ul li a {
+        padding: 6px 12px;
+        font-size: 13px;
     }
 }
 
@@ -65,44 +102,51 @@
         max-height: 50px;
     }
 
-    .main-nav {
-        margin-top: 5px;
-    }
-
-    .main-nav ul {
-        justify-content: flex-end;
-    }
-
     .main-nav ul li {
-        margin: 0 10px;
+        margin: 0 12px;
     }
 
     .main-nav ul li a {
         font-size: 12px;
     }
 
-    .top-right-container {
-        margin-top: 5px;
+    /* Nouveau layout header pour tablettes */
+    .header-top-elements {
+        margin-right: 15px;
+        margin-bottom: 8px;
     }
 
-    .social-icons,
-    .lang-selector {
-        margin-left: 10px;
+    .social-icons {
+        margin-right: 10px;
     }
 
-    .contact-btn .btn {
-        padding: 8px 15px;
+    .social-icons a {
+        margin: 0 2px;
+        font-size: 14px;
+    }
+
+    .lang-selector a,
+    .lang-selector span {
         font-size: 12px;
     }
 
-    /* Dropdown menu adjustments */
+    .contact-btn {
+        margin-right: 10px;
+    }
+
+    .contact-btn .btn {
+        padding: 6px 12px;
+        font-size: 11px;
+    }
+
+    /* Dropdown adjustments pour tablettes */
     .dropdown-menu {
-        min-width: 180px;
+        min-width: 160px;
         padding: 10px 0;
     }
 
     .dropdown-menu ul li a {
-        padding: 6px 12px;
+        padding: 5px 10px;
         font-size: 12px;
     }
 
@@ -204,7 +248,7 @@
         max-width: 540px;
     }
 
-    /* Header mobile complete redesign */
+    /* Header mobile complete redesign selon maquette */
     header {
         position: relative;
         background-color: var(--primary-color);
@@ -222,34 +266,42 @@
         display: inline-block;
     }
 
-    .social-icons {
-        display: none;
+    /* Layout mobile pour le header selon la maquette */
+    .header-right-section {
+        flex-direction: column;
+        align-items: flex-end;
+        justify-content: center;
     }
 
-    .top-right-container {
-        flex-direction: row;
+    .header-top-elements {
+        display: none;
+        /* Masquer sur mobile */
+    }
+
+    .header-bottom-elements {
+        display: flex;
         align-items: center;
         justify-content: flex-end;
-        margin-top: 0;
+        width: 100%;
     }
 
     .lang-selector {
-        position: relative;
-        top: auto;
-        right: auto;
-        margin-right: 10px;
+        order: 1;
+        margin-right: 8px;
     }
 
     .contact-btn {
-        position: relative;
-        top: auto;
-        right: auto;
-        margin-right: 10px;
+        order: 2;
+        margin-right: 8px;
     }
 
     .contact-btn .btn {
         padding: 5px 10px;
-        font-size: 11px;
+        font-size: 10px;
+    }
+
+    .mobile-menu-toggle {
+        order: 3;
     }
 
     .slide {
@@ -499,23 +551,28 @@
         width: 260px;
     }
 
-    /* Mobile header adjustments */
-    .top-right-container {
+    /* Mobile header adjustments pour très petits écrans */
+    .header-bottom-elements {
         flex-wrap: wrap;
+        justify-content: center;
+        gap: 5px;
     }
 
     .lang-selector {
         order: 1;
         margin-right: 5px;
+        margin-bottom: 3px;
     }
 
     .contact-btn {
         order: 2;
         margin-right: 5px;
+        margin-bottom: 3px;
     }
 
     .mobile-menu-toggle {
         order: 3;
+        margin-bottom: 3px;
     }
 }
 
@@ -575,10 +632,79 @@
 
     .contact-btn .btn {
         padding: 4px 8px;
-        font-size: 10px;
+        font-size: 9px;
     }
 
-    .top-right-container {
+    /* Layout ultra compact pour les très petits écrans */
+    .header-bottom-elements {
         justify-content: center;
+        gap: 3px;
+    }
+
+    .lang-selector,
+    .contact-btn,
+    .mobile-menu-toggle {
+        margin: 0;
+    }
+}
+
+/* Ajustements spéciaux pour l'affichage des dropdowns sur tous les écrans */
+@media (min-width: 768px) {
+    .has-dropdown:hover .dropdown-menu {
+        display: block;
+    }
+
+    /* Assurer que les dropdowns sont bien positionnés selon la maquette */
+    .dropdown-menu {
+        white-space: nowrap;
+    }
+
+    .dropdown-menu ul li a {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+/* Optimisations pour la carte sur différents écrans */
+@media (max-width: 991px) {
+    .world-map {
+        height: 450px;
+    }
+}
+
+@media (max-width: 767px) {
+    .world-map {
+        height: 350px;
+    }
+
+    .map-info-popup {
+        font-size: 12px;
+        padding: 12px;
+        min-width: 180px;
+    }
+
+    .country-flag img {
+        width: 20px;
+    }
+}
+
+@media (max-width: 575px) {
+    .world-map {
+        height: 280px;
+    }
+
+    .map-info-popup {
+        font-size: 11px;
+        padding: 10px;
+        min-width: 160px;
+    }
+
+    .country-flag {
+        margin-bottom: 8px;
+    }
+
+    .country-flag img {
+        width: 18px;
     }
 }
