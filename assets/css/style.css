@@ -1,4 +1,4 @@
-/* style.css - Styles principaux du site OAG */
+/* style.css - Styles principaux du site OAG (version finale avec toutes les corrections) */
 
 /* Variables CSS globales */
 :root {
@@ -14,6 +14,10 @@
     --transition: all 0.3s ease;
     --font-heading: 'Montserrat', sans-serif;
     --font-body: 'Roboto', sans-serif;
+    --footer-bg: #444444;
+    --footer-dark-bg: #333333;
+    --footer-text: #dddddd;
+    --footer-title: #ffffff;
 }
 
 /* Reset et styles de base */
@@ -47,7 +51,12 @@ img {
     height: auto;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     font-family: var(--font-heading);
     font-weight: 700;
     margin-bottom: 15px;
@@ -142,7 +151,7 @@ ul {
     margin-top: 1.5rem;
 }
 
-/* Header */
+/* Header - Styles corrigés avec nouveau positionnement */
 header {
     position: absolute;
     width: 100%;
@@ -166,6 +175,12 @@ header.scrolled {
 
 .logo img {
     max-height: 60px;
+}
+
+/* Navigation principale avec correction du positionnement */
+.main-nav {
+    margin-top: 10px;
+    /* Décalage vers le bas */
 }
 
 .main-nav ul {
@@ -193,6 +208,7 @@ header.scrolled {
     color: var(--secondary-color);
 }
 
+/* Styles des menus déroulants corrigés */
 .has-dropdown {
     position: relative;
 }
@@ -215,6 +231,7 @@ header.scrolled {
     transform: rotate(180deg);
 }
 
+/* Position du dropdown juste à droite des éléments du menu */
 .dropdown-menu {
     position: absolute;
     top: 100%;
@@ -229,6 +246,8 @@ header.scrolled {
     transition: all 0.3s ease;
     z-index: 100;
     padding: 15px 0;
+    margin-top: 5px;
+    /* Décalage légèrement vers le bas */
 }
 
 .has-dropdown:hover .dropdown-menu,
@@ -261,8 +280,17 @@ header.scrolled {
     color: var(--primary-color);
 }
 
-.social-icons, 
-.lang-selector, 
+/* Conteneur pour les éléments à droite dans le header - NOUVEAU */
+.top-right-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-top: 10px;
+    /* Déplacement vers le bas */
+}
+
+.social-icons,
+.lang-selector,
 .contact-btn {
     display: inline-block;
     vertical-align: middle;
@@ -293,6 +321,15 @@ header.scrolled {
     color: var(--white);
     margin: 0 5px;
     font-weight: 600;
+}
+
+/* Ajustement du bouton Contact - CORRIGÉ */
+.contact-btn {
+    margin-left: 15px;
+}
+
+.contact-btn .btn {
+    margin-top: 0;
 }
 
 /* Mobile menu toggle */
@@ -443,7 +480,7 @@ header.scrolled {
     margin: 0 10px;
 }
 
-/* Main Banner */
+/* Main Banner - AVEC SUPPRESSION DES EFFETS OVALES */
 .main-banner {
     position: relative;
     height: 100vh;
@@ -516,6 +553,8 @@ header.scrolled {
     font-size: 24px;
     cursor: pointer;
     padding: 5px;
+    outline: none !important;
+    box-shadow: none !important;
 }
 
 .slider-dots {
@@ -531,11 +570,32 @@ header.scrolled {
     margin: 0 5px;
     cursor: pointer;
     transition: all 0.3s ease;
+    outline: none !important;
+    box-shadow: none !important;
 }
 
 .slider-dots .dot.active {
     background-color: var(--white);
     transform: scale(1.2);
+}
+
+/* SUPPRESSION COMPLÈTE DES FORMES OVALES BLEUES */
+.slide::before,
+.slider-controls::before,
+.slider-dots::before,
+.prev::before,
+.next::before,
+.dot::before {
+    display: none !important;
+}
+
+.slider::after,
+.slider-controls::after,
+.slider-dots::after,
+.prev::after,
+.next::after,
+.dot::after {
+    display: none !important;
 }
 
 /* Projects Section */
@@ -844,6 +904,8 @@ select.form-control {
 
 .echo-section .slider-controls button {
     color: var(--primary-color);
+    outline: none !important;
+    box-shadow: none !important;
 }
 
 .echo-section .slider-dots .dot {
@@ -934,6 +996,8 @@ select.form-control {
 
 .more-section .slider-controls button {
     color: var(--primary-color);
+    outline: none !important;
+    box-shadow: none !important;
 }
 
 .more-section .slider-dots .dot {
@@ -981,7 +1045,8 @@ select.form-control {
     transform: scale(1.05);
 }
 
-.news-category, .news-date {
+.news-category,
+.news-date {
     padding: 15px 20px 0;
 }
 
@@ -1016,7 +1081,7 @@ select.form-control {
     margin: 0 20px 20px;
 }
 
-/* Experts Section */
+/* Experts Section - AVEC CORRECTION DU POSITIONNEMENT LINKEDIN */
 .experts-section {
     padding: var(--section-padding);
     background-color: var(--light-color);
@@ -1045,10 +1110,18 @@ select.form-control {
     padding: 30px;
 }
 
+/* Nouveau conteneur pour le header des experts - CORRECTION PRINCIPALE */
+.expert-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
 .expert-name {
     font-size: 24px;
     color: var(--dark-color);
-    margin-bottom: 10px;
+    margin-bottom: 0;
 }
 
 .expert-position {
@@ -1068,6 +1141,12 @@ select.form-control {
     font-size: 14px;
     color: var(--text-color);
     margin-bottom: 20px;
+}
+
+/* Positionnement du bouton LinkedIn en haut à droite - CORRECTION */
+.expert-social {
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
 .expert-social a {
@@ -1096,6 +1175,8 @@ select.form-control {
 
 .experts-section .slider-controls button {
     color: var(--primary-color);
+    outline: none !important;
+    box-shadow: none !important;
 }
 
 .experts-section .slider-dots .dot {
@@ -1138,15 +1219,16 @@ select.form-control {
     transform: scale(1.05);
 }
 
-/* Footer */
+/* Footer - STYLES CORRIGÉS AVEC PALETTE DE COULEURS ET SÉPARATEURS */
 footer {
-    background-color: var(--dark-color);
-    color: var(--light-color);
+    background-color: var(--footer-bg);
+    color: var(--footer-text);
 }
 
 .footer-top {
     padding: 15px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: var(--footer-dark-bg);
+    border-bottom: none;
 }
 
 .footer-nav {
@@ -1156,30 +1238,41 @@ footer {
 }
 
 .footer-nav li {
-    margin-right: 20px;
+    margin-right: 0;
+    display: flex;
+    align-items: center;
 }
 
 .footer-nav li a {
     color: var(--white);
     font-size: 14px;
+    padding: 0 15px;
 }
 
 .footer-nav li a:hover {
     color: var(--secondary-color);
 }
 
-.footer-top .lang-selector a, 
+/* Séparateur vertical entre "Contacts" et "Travailler avec nous" */
+.footer-nav li.separator {
+    color: var(--footer-text);
+    margin: 0;
+}
+
+.footer-top .lang-selector a,
 .footer-top .lang-selector span {
     color: var(--white);
 }
 
 .footer-main {
     padding: 50px 0;
+    background-color: var(--footer-bg);
 }
 
 .footer-logo img {
     max-height: 60px;
     margin-bottom: 20px;
+    filter: brightness(0.8);
 }
 
 .footer-social {
@@ -1197,7 +1290,7 @@ footer {
 }
 
 .footer-menu h3 {
-    color: var(--white);
+    color: var(--footer-title);
     font-size: 18px;
     margin-bottom: 20px;
     font-weight: 600;
@@ -1214,7 +1307,7 @@ footer {
 }
 
 .footer-menu ul li a {
-    color: var(--light-color);
+    color: var(--footer-text);
     font-size: 14px;
 }
 
@@ -1222,9 +1315,27 @@ footer {
     color: var(--secondary-color);
 }
 
+/* Séparateurs verticaux entre les colonnes du footer */
+.footer-column-separator {
+    position: relative;
+    margin-left: 15px;
+    padding-left: 15px;
+}
+
+.footer-column-separator::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
 .footer-bottom {
     padding: 20px 0;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: var(--footer-dark-bg);
+    border-top: none;
 }
 
 .footer-links {
@@ -1235,20 +1346,30 @@ footer {
 }
 
 .footer-links li {
-    margin-right: 20px;
+    margin-right: 0;
+    display: flex;
+    align-items: center;
 }
 
 .footer-links li a {
-    color: var(--light-color);
+    color: var(--footer-text);
     font-size: 14px;
+    padding: 0 15px;
 }
 
 .footer-links li a:hover {
     color: var(--secondary-color);
 }
 
+/* Séparateurs verticaux entre les liens du footer bottom */
+.footer-links li.separator {
+    color: var(--footer-text);
+    margin: 0;
+}
+
 .footer-copyright {
     font-size: 14px;
+    color: var(--footer-text);
 }
 
 .footer-credits {

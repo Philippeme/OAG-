@@ -1,4 +1,4 @@
-/* animations.css - Effets visuels et transitions */
+/* animations.css - Effets visuels et transitions (version corrigée) */
 
 /* Animation de l'en-tête lors du défilement */
 header {
@@ -75,7 +75,7 @@ header.scrolled {
     left: 0;
 }
 
-/* Animation du menu déroulant */
+/* Animation du menu déroulant avec positionnement corrigé */
 .has-dropdown {
     position: relative;
 }
@@ -93,11 +93,12 @@ header.scrolled {
     transition: transform 0.3s ease;
 }
 
+.has-dropdown:hover::after,
 .has-dropdown.active::after {
     transform: rotate(180deg);
 }
 
-.has-dropdown .dropdown-menu {
+.dropdown-menu {
     position: absolute;
     top: 100%;
     left: 0;
@@ -111,8 +112,10 @@ header.scrolled {
     transition: all 0.3s ease;
     z-index: 100;
     padding: 15px 0;
+    margin-top: 5px;
 }
 
+.has-dropdown:hover .dropdown-menu,
 .has-dropdown.active .dropdown-menu {
     opacity: 1;
     visibility: visible;
@@ -145,9 +148,91 @@ header.scrolled {
     transform: rotate(-45deg) translate(5px, -6px);
 }
 
+/* SUPPRESSION COMPLÈTE DES FORMES OVALES BLEUES */
+/* Cette section est cruciale pour corriger le problème signalé */
+
+.main-banner *,
+.echo-section *,
+.more-section *,
+.experts-section *,
+.slider *,
+.slider-controls *,
+.slide *,
+.slick-slider *,
+.slick-slide *,
+.slick-arrow *,
+.slick-dots *,
+.prev,
+.next,
+.dot {
+    outline: none !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+/* Exception pour les points du slider qui doivent rester ronds */
+.slider-dots .dot {
+    border-radius: 50% !important;
+}
+
+/* Suppression de tous les pseudo-éléments potentiellement problématiques */
+.slider::before,
+.slider::after,
+.slider-controls::before,
+.slider-controls::after,
+.slide::before,
+.slide::after,
+.prev::before,
+.prev::after,
+.next::before,
+.next::after,
+.dot::before,
+.dot::after,
+.slick-slider::before,
+.slick-slider::after,
+.slick-slide::before,
+.slick-slide::after,
+.main-banner::before,
+.main-banner::after,
+.echo-section::before,
+.echo-section::after,
+.more-section::before,
+.more-section::after,
+.experts-section::before,
+.experts-section::after {
+    display: none !important;
+    content: none !important;
+    border: none !important;
+    outline: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+/* Suppression des focus et des effets de survol problématiques */
+.slider-controls button:focus,
+.slider-controls button:hover,
+.slider-controls button:active,
+.slider-dots .dot:focus,
+.slider-dots .dot:hover,
+.slider-dots .dot:active,
+.prev:focus,
+.prev:hover,
+.prev:active,
+.next:focus,
+.next:hover,
+.next:active,
+.slide:focus,
+.slide:hover,
+.slide:active {
+    outline: none !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
 /* Animation des dots des sliders */
 .slider-dots .dot {
     transition: transform 0.3s ease, background-color 0.3s ease;
+    border-radius: 50% !important;
 }
 
 .slider-dots .dot.active {
@@ -275,6 +360,9 @@ header.scrolled {
 /* Animation des boutons du slider */
 .slider-controls button {
     transition: transform 0.3s ease, color 0.3s ease;
+    outline: none !important;
+    border: none !important;
+    box-shadow: none !important;
 }
 
 .slider-controls button:hover {
@@ -415,7 +503,7 @@ header.scrolled {
     transform: translateX(5px);
 }
 
-/* Animation pour le survol des experts */
+/* Animation pour le survol des experts avec le nouveau positionnement du LinkedIn */
 .expert-info {
     position: relative;
     overflow: hidden;
@@ -436,6 +524,20 @@ header.scrolled {
     left: 0;
 }
 
+/* Animation spéciale pour le header des experts */
+.expert-header {
+    transition: all 0.3s ease;
+}
+
+.expert-social a {
+    transition: all 0.3s ease;
+}
+
+.expert-social a:hover {
+    background-color: var(--secondary-color);
+    transform: scale(1.1);
+}
+
 /* Animation pour les points de navigation des sliders */
 .slider-dots .dot::before {
     content: '';
@@ -452,4 +554,23 @@ header.scrolled {
 .slider-dots .dot.active::before,
 .slider-dots .dot:hover::before {
     border-color: var(--primary-color);
+}
+
+/* Animation du top-right-container */
+.top-right-container {
+    transition: all 0.3s ease;
+}
+
+/* Animation pour le footer avec séparateurs */
+.footer-nav li.separator,
+.footer-links li.separator {
+    transition: opacity 0.3s ease;
+}
+
+.footer-column-separator::before {
+    transition: background-color 0.3s ease;
+}
+
+.footer-column-separator:hover::before {
+    background-color: rgba(255, 255, 255, 0.4);
 }
