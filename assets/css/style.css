@@ -253,7 +253,7 @@ header.scrolled {
     margin-right: 0;
     /* Suppression du décalage vers la gauche */
     position: relative;
-    right: -18px;
+    right: -2px;
     /* Ajustement fin pour centrer avec le bouton Contacts */
 }
 
@@ -1007,14 +1007,6 @@ select.form-control {
     background-color: var(--white);
 }
 
-.echo-section .section-title {
-    max-width: 1200px;
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: 15px;
-    padding-right: 15px;
-}
-
 .echo-slider {
     margin-bottom: 30px;
 }
@@ -1126,14 +1118,6 @@ select.form-control {
 .more-section {
     padding: var(--section-padding);
     background-color: var(--light-color);
-}
-
-.more-section .section-title {
-    max-width: 1200px;
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: 15px;
-    padding-right: 15px;
 }
 
 .topic-slide {
@@ -1397,7 +1381,7 @@ select.form-control {
     position: static;
     justify-content: center;
     transform: none;
-    margin-top: 30px;
+    margin-top: 18px;
 }
 
 .experts-section .slider-controls button {

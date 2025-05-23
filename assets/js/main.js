@@ -246,7 +246,7 @@ function animateOnScroll() {
 function preloadImages() {
     // Images principales à précharger
     const imagesToPreload = [
-        'assets/images/slider/slide-1.jpg',
+        'assets/images/slider/slide-1.png',
         'assets/images/slider/slide-2.jpg',
         'assets/images/slider/slide-3.jpg',
         'assets/images/logo/oag-logo.png'
