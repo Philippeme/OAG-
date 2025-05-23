@@ -1,7 +1,7 @@
 /**
  * map.js - Gestion de la carte interactive du site OAG
  * Ce fichier contient toutes les fonctionnalités liées à la carte
- * et au système de filtrage associé - VERSION CORRIGÉE SELON MAQUETTE
+ * et au système de filtrage associé - VERSION CORRIGÉE
  */
 
 // Variable globale pour stocker l'instance de la carte
@@ -226,16 +226,17 @@ function initMap() {
     if (!mapContainer) return;
 
     // Créer la carte Leaflet avec un centrage optimisé pour l'Afrique
+    // CORRECTION: Désactiver le contrôle de zoom par défaut
     worldMap = L.map(mapContainer, {
         center: [15, 15], // Centré sur l'Afrique
         zoom: 3,
         minZoom: 2,
         maxZoom: 8,
         scrollWheelZoom: true,
-        zoomControl: true
+        zoomControl: false // IMPORTANT: Désactiver le contrôle par défaut
     });
 
-    // Contrôles de zoom repositionnés
+    // CORRECTION: Ajouter UN SEUL contrôle de zoom en haut à droite
     L.control.zoom({
         position: 'topright'
     }).addTo(worldMap);
@@ -284,10 +285,10 @@ function addCountryMarkers() {
                 weight: 2
             }).addTo(worldMap);
 
-            // Ajouter les événements interactifs
+            // MODIFICATION: Utiliser le popup amélioré pour les pays
             circle.on('click', function (e) {
                 e.originalEvent.stopPropagation();
-                showCountryInfo(country, e.latlng);
+                showCountryInfoInMap(country, e.latlng);
             });
 
             circle.on('mouseover', function () {
@@ -311,140 +312,31 @@ function addCountryMarkers() {
 }
 
 /**
- * Ajouter les marqueurs des projets sur la carte
- */
-function addProjectMarkers() {
-    // Créer une icône personnalisée pour les projets
-    const projectIcon = L.divIcon({
-        className: 'project-marker',
-        html: '<div class="marker-icon"><i class="fas fa-map-marker-alt"></i></div>',
-        iconSize: [25, 25],
-        iconAnchor: [12, 25]
-    });
-
-    // Parcourir les données des projets
-    projectsData.forEach(project => {
-        // Créer un marqueur pour le projet
-        const marker = L.marker(project.coords, {
-            icon: projectIcon
-        }).addTo(worldMap);
-
-        // Créer une popup avec les informations du projet
-        const popupContent = `
-            <div class="project-popup">
-                <h3>${project.name}</h3>
-                <div class="project-details">
-                    <p><strong>Pays:</strong> ${project.country}</p>
-                    <p><strong>Secteur:</strong> ${project.type}</p>
-                    <p><strong>Année:</strong> ${project.year}</p>
-                    <p><strong>Bailleur:</strong> ${project.donor}</p>
-                    <p><strong>Type:</strong> ${project.sector}</p>
-                    <p class="project-desc">${project.description}</p>
-                </div>
-            </div>
-        `;
-
-        marker.bindPopup(popupContent, {
-            maxWidth: 300,
-            closeButton: true
-        });
-
-        // Stocker une référence au marqueur dans les données du projet
-        project.marker = marker;
-    });
-
-    // Ajouter du CSS personnalisé pour les marqueurs
-    addProjectMarkerStyles();
-}
-
-/**
- * Ajouter les styles pour les marqueurs de projets
- */
-function addProjectMarkerStyles() {
-    const style = document.createElement('style');
-    style.textContent = `
-        .project-marker {
-            background: transparent;
-        }
-        
-        .marker-icon {
-            color: #1a4b8f;
-            font-size: 22px;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
-            transition: transform 0.3s ease, color 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 25px;
-            height: 25px;
-        }
-        
-        .marker-icon:hover {
-            color: #f18221;
-            transform: scale(1.3);
-        }
-        
-        .project-popup {
-            font-family: 'Roboto', sans-serif;
-        }
-        
-        .project-popup h3 {
-            font-size: 16px;
-            margin-bottom: 12px;
-            color: #1a4b8f;
-            font-weight: 600;
-            line-height: 1.3;
-        }
-        
-        .project-details p {
-            margin: 6px 0;
-            font-size: 13px;
-            line-height: 1.4;
-        }
-        
-        .project-details strong {
-            color: #333;
-            font-weight: 600;
-        }
-        
-        .project-desc {
-            margin-top: 10px !important;
-            padding-top: 8px;
-            border-top: 1px solid #eee;
-            font-style: italic;
-            color: #666;
-        }
-        
-        .leaflet-popup-content {
-            margin: 12px 16px;
-        }
-        
-        .leaflet-popup-content-wrapper {
-            border-radius: 8px;
-        }
-    `;
-    document.head.appendChild(style);
-}
-
-/**
- * Afficher les informations d'un pays dans la popup selon la maquette
+ * NOUVELLE FONCTION: Afficher les informations d'un pays dans le popup de la carte
  * @param {Object} country - Données du pays
  * @param {Object} latlng - Coordonnées du clic
  */
-function showCountryInfo(country, latlng) {
+function showCountryInfoInMap(country, latlng) {
     const popup = document.getElementById('map-popup');
 
     if (!popup) return;
 
-    // Mettre à jour le contenu du popup selon la maquette
+    // Calculer le nombre total de projets et d'intervenants pour ce pays
+    const countryProjects = projectsData.filter(project => project.country === country.name);
+    const totalProjects = countryProjects.length || country.projects;
+
+    // Calculer le nombre total d'intervenants (estimation basée sur les projets)
+    const totalInterveners = country.interveners || (totalProjects * 3.5); // Estimation
+
+    // Mettre à jour le contenu du popup avec le format de la maquette
     popup.innerHTML = `
         <div class="country-flag">
             <img src="${country.flag}" alt="${country.name}" onerror="this.style.display='none'">
             <span>${country.name}</span>
         </div>
         <div class="country-stats">
-            <div class="stat">Projet : <span>${country.projects}</span></div>
-            <div class="stat">Intervenants : <span>${country.interveners}</span></div>
+            <div class="stat">Projets : <span>${totalProjects}</span></div>
+            <div class="stat">Intervenants : <span>${Math.round(totalInterveners)}</span></div>
         </div>
     `;
 
@@ -477,6 +369,165 @@ function showCountryInfo(country, latlng) {
             popup.style.top = '10px';
         }
     }, 10);
+}
+
+/**
+ * Ajouter les marqueurs des projets sur la carte
+ */
+function addProjectMarkers() {
+    // Créer une icône personnalisée pour les projets
+    const projectIcon = L.divIcon({
+        className: 'project-marker',
+        html: '<div class="marker-icon"><i class="fas fa-map-marker-alt"></i></div>',
+        iconSize: [25, 25],
+        iconAnchor: [12, 25]
+    });
+
+    // Parcourir les données des projets
+    projectsData.forEach(project => {
+        // Créer un marqueur pour le projet
+        const marker = L.marker(project.coords, {
+            icon: projectIcon
+        }).addTo(worldMap);
+
+        // MODIFICATION: Améliorer le contenu de la popup pour inclure toutes les informations
+        const popupContent = `
+            <div class="project-popup">
+                <h3>${project.name}</h3>
+                <div class="project-details">
+                    <p><strong>Pays:</strong> ${project.country}</p>
+                    <p><strong>Secteur:</strong> ${project.type}</p>
+                    <p><strong>Année:</strong> ${project.year}</p>
+                    <p><strong>Bailleur:</strong> ${project.donor}</p>
+                    <p><strong>Type:</strong> ${project.sector}</p>
+                    <p class="project-desc">${project.description}</p>
+                </div>
+            </div>
+        `;
+
+        marker.bindPopup(popupContent, {
+            maxWidth: 300,
+            closeButton: true,
+            className: 'custom-popup'
+        });
+
+        // Stocker une référence au marqueur dans les données du projet
+        project.marker = marker;
+    });
+
+    // Ajouter du CSS personnalisé pour les marqueurs
+    addProjectMarkerStyles();
+}
+
+/**
+ * Ajouter les styles pour les marqueurs de projets et les popups améliorés
+ */
+function addProjectMarkerStyles() {
+    const style = document.createElement('style');
+    style.textContent = `
+        .project-marker {
+            background: transparent;
+        }
+        
+        .marker-icon {
+            color: #1a4b8f;
+            font-size: 22px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease, color 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 25px;
+            height: 25px;
+        }
+        
+        .marker-icon:hover {
+            color: #f18221;
+            transform: scale(1.3);
+        }
+        
+        .custom-popup .leaflet-popup-content-wrapper {
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            font-family: 'Roboto', sans-serif;
+        }
+        
+        .custom-popup .leaflet-popup-tip {
+            background: white;
+            box-shadow: 0 3px 14px rgba(0, 0, 0, 0.15);
+        }
+        
+        .project-popup {
+            font-family: 'Roboto', sans-serif;
+        }
+        
+        .project-popup h3 {
+            font-size: 16px;
+            margin-bottom: 12px;
+            color: #1a4b8f;
+            font-weight: 600;
+            line-height: 1.3;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 8px;
+        }
+        
+        .project-details p {
+            margin: 8px 0;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+        
+        .project-details strong {
+            color: #333;
+            font-weight: 600;
+            display: inline-block;
+            min-width: 70px;
+        }
+        
+        .project-desc {
+            margin-top: 12px !important;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+            font-style: italic;
+            color: #666;
+            font-size: 12px !important;
+        }
+        
+        .leaflet-popup-content {
+            margin: 15px 18px;
+        }
+        
+        .leaflet-popup-content-wrapper {
+            border-radius: 10px;
+        }
+        
+        /* Amélioration du style du contrôle de zoom */
+        .leaflet-control-zoom {
+            border: none !important;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2) !important;
+            border-radius: 8px !important;
+            overflow: hidden;
+        }
+        
+        .leaflet-control-zoom a {
+            width: 36px !important;
+            height: 36px !important;
+            line-height: 36px !important;
+            color: #1a4b8f !important;
+            background: white !important;
+            transition: all 0.3s ease !important;
+        }
+        
+        .leaflet-control-zoom a:hover {
+            background: #f18221 !important;
+            color: white !important;
+        }
+        
+        .leaflet-control-zoom-in {
+            border-bottom: 1px solid #ddd !important;
+        }
+    `;
+    document.head.appendChild(style);
 }
 
 /**
@@ -666,7 +717,7 @@ function filterProjects(filters) {
         }
     });
 
-    // Afficher le nombre de résultats
+    // Afficher le nombre de résultats avec animation
     updateResultsCounter(visibleProjectsCount);
 }
 
@@ -709,14 +760,41 @@ function resetAllFilters() {
     });
 
     updateResultsCounter(projectsData.length);
+
+    // Afficher une notification de réinitialisation
+    if (typeof showNotification === 'function') {
+        showNotification('Filtres réinitialisés avec succès');
+    }
 }
 
 /**
- * Mettre à jour le compteur de résultats
+ * Mettre à jour le compteur de résultats avec animation
  * @param {number} count - Nombre de projets visibles
  */
 function updateResultsCounter(count) {
-    // Optionnel : ajouter un compteur de résultats dans l'interface
+    // Création d'un élément de notification temporaire
+    const notification = document.createElement('div');
+    notification.className = 'map-results-notification';
+    notification.textContent = `${count} projet${count > 1 ? 's' : ''} affiché${count > 1 ? 's' : ''} sur la carte`;
+
+    const mapContainer = document.getElementById('world-map');
+    if (mapContainer) {
+        mapContainer.appendChild(notification);
+
+        // Animation d'entrée
+        setTimeout(() => {
+            notification.classList.add('show');
+        }, 10);
+
+        // Suppression après 3 secondes
+        setTimeout(() => {
+            notification.classList.remove('show');
+            setTimeout(() => {
+                notification.remove();
+            }, 300);
+        }, 3000);
+    }
+
     console.log(`${count} projet(s) affiché(s) sur la carte`);
 }
 
@@ -747,6 +825,37 @@ function updateMap() {
         worldMap.invalidateSize();
     }
 }
+
+/**
+ * Ajouter des styles CSS pour la notification de résultats
+ */
+(function addResultsNotificationStyles() {
+    const style = document.createElement('style');
+    style.textContent = `
+        .map-results-notification {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-20px);
+            background: rgba(26, 75, 143, 0.95);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .map-results-notification.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    `;
+    document.head.appendChild(style);
+})();
 
 // Exposer les fonctions publiquement
 window.mapUtils = {
